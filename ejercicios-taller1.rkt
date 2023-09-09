@@ -42,3 +42,12 @@
             (cons (list (car L1) (car L2))
                   (append (cartesian-product (list (car L1)) (cdr L2))
                           (cartesian-product (cdr L1) L2)))))))
+
+;Retorna una lista donde la posicion n-esima corresponde al resultado de aplicar la funcion F sobre los elementos en la posicion n-esima en L1 y L2.
+;cartesian-product : List -> List
+;usage: (list-length l) = Lista de aplicar F entre los elementos de L1 Y L2
+(define zip
+  (lambda (F L1 L2)
+    (if (null? L1)
+        '()
+        (cons (F (car L1)(car L2))(zip F (cdr L1)(cdr L2))))))
