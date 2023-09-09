@@ -7,9 +7,9 @@
 
 ;; mi-append
 ;; Proposito:
-;; L1 x L2 -> L' : Retorna una lista que contiene los elementos que pertenecen a L1 y L2..
+;; L1 x L2 -> L' : Retorna una lista que contiene los elementos que pertenecen a L1 y L2.
 ;;
-;; <lista>      := () | (<SchemeValue> <lista>)
+;; <lista> := () | (<SchemeValue> <lista>)
 
 (define mi-append
   (lambda (L1 L2)
@@ -27,9 +27,8 @@
 ;; Proposito:
 ;; L -> L' : Invierte los pares de L.
 ;;
-;; <lista> ::= () | (<par> <lista>)
-;; <par>   ::= (<elemento> <elemento>)
-;; <elemento>   ::= <number> | <symbol> | <string>
+;; <lista> := () | (<par> <lista>)
+;; <par>   := (<SchemeValue> <SchemeValue>)
 
 (define invert
   (lambda(L)
@@ -48,8 +47,7 @@
 ;; Proposito:
 ;; P x L -> L' : Retorna una lista que contiene los elementos que pertenecen a L y que satisfacen el predicado P
 ;;
-;; <lista> ::= () | (<elemento> <lista>)
-;; <elemento>   ::= <number> | <symbol> | <string>
+;; <lista> := () | (<SchemeValue> <lista>)
 
 (define filter-in
   (lambda (P L)
@@ -68,8 +66,7 @@
 ;; Proposito:
 ;; L1 x L2 -> L' : Retorna una L' de tuplas que representen el producto cartesiano entre L1 y L2.
 ;;
-;; <lista> ::= () | (<elemento> <lista>)
-;; <elemento>   ::= <number> | <symbol> | <string>
+;; <lista> := () | (<SchemeValue> <lista>)
 
 (define cartesian-product
   (lambda (L1 L2)
@@ -84,13 +81,13 @@
 ;; Pruebas
 (cartesian-product '(a b c) '(x y))
 (cartesian-product '(p q r) '(5 6 7))
+(cartesian-product '("j" q 1) '(h 7 "n"))
 
-;; cartesian-product
+;; zip
 ;; Proposito:
 ;; F x L1 x L2 -> L' : Retorna una L' donde la posicion n-esima corresponde al resultado de aplicar la funcion F sobre los elementos en la posicion n-esima en L1 y L2.
 ;;
-;; <lista> ::= () | (<elemento> <lista>)
-;; <elemento>   ::= <number> | <symbol> | <string>
+;; <lista> := () | (<SchemeValue> <lista>)
 
 (define zip
   (lambda (F L1 L2)
@@ -101,13 +98,15 @@
 ;; Pruebas
 (zip + '(1 4) '(6 2))
 (zip * '(11 5 6) '(10 9 8))
+(zip string-append '("Ho" "co" "es") '("la" "mo" "tas"))
+(zip eqv? '(a 1 "es") '(a "mo" "es"))
 
 ;; operate
 ;; Proposito:
 ;; lrators x lrands -> number : Retorna un number de aplicar sucesivamente las operaciones en lrators a los valores en lrands.
 ;;
-;; <lrands> ::= () | (<number> <lista>)
-;; <lrators> ::= () | (<symbol> <lista>)
+;; <lrands>  := () | (<number> <lista>)
+;; <lrators> := () | (<binSymbol> <lista>)
 
 (define operate
   (lambda (lrators lrands)
@@ -124,10 +123,10 @@
 ;; Proposito:
 ;; OperacionB -> int : Retorna el int de hacer operaciones suma, resta y multiplicacion correspondientes segun la OperacionB.
 ;;
-;; <OperacionB> ::= <int>
-;;              ::= <OperacionB> ’suma <OperacionB>)
-;;              ::= <OperacionB> ’resta <OperacionB>)
-;;              ::= <OperacionB> ’multiplica <OperacionB>)
+;; <OperacionB> := <int>
+;;              := <OperacionB> ’suma <OperacionB>)
+;;              := <OperacionB> ’resta <OperacionB>)
+;;              := <OperacionB> ’multiplica <OperacionB>)
 (define Operar-binarias
   (lambda (OperacionB)
     (if(number? OperacionB)
