@@ -84,6 +84,24 @@
 (zip + '(1 4) '(6 2))
 (zip * '(11 5 6) '(10 9 8))
 
+;; operate
+;; Proposito:
+;; lrators x lrands -> number : Retorna un number de aplicar sucesivamente las operaciones en lrators a los valores en lrands.
+;;
+;; <lrands> ::= () | (<number> <lista>)
+;; <lrators> ::= () | (<symbol> <lista>)
+
+(define operate
+  (lambda (lrators lrands)
+    (if (null? lrators)
+        (car lrands)
+        (operate (cdr lrators)
+                 (append (list ((car lrators) (car lrands) (cadr lrands)))(cddr lrands))))))
+
+;; Pruebas
+(operate (list + * + - *) '(1 2 8 4 11 6))
+(operate (list *) '(4 5))
+
 ;; cartesian-product
 ;; Proposito:
 ;; OperacionB -> int : Retorna el int de hacer operaciones suma, resta y multiplicacion correspondientes segun la OperacionB.
