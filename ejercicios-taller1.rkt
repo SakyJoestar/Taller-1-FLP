@@ -77,7 +77,7 @@
             (cons (list (car L1) (car L2))
                   (mi-append (cartesian-product (list (car L1)) (cdr L2))
                           (cartesian-product (cdr L1) L2)))))))
-
+                          
 ;; Pruebas
 (cartesian-product '(a b c) '(x y))
 (cartesian-product '(p q r) '(5 6 7))
@@ -127,6 +127,7 @@
 ;;              := <OperacionB> ’suma <OperacionB>)
 ;;              := <OperacionB> ’resta <OperacionB>)
 ;;              := <OperacionB> ’multiplica <OperacionB>)
+
 (define Operar-binarias
   (lambda (OperacionB)
     (if(number? OperacionB)
