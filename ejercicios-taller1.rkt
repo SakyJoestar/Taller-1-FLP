@@ -18,7 +18,8 @@ Christian Vargas 2179172
 ;; ********************* Funciones propias *********************
 ;; mi-append
 ;; Proposito:
-;; L1 x L2 -> L' : Retorna una lista que contiene los elementos que pertenecen a L1 y L2.
+;; L1 x L2 -> L' : Retorna una lista que contiene los elementos
+;;                 que pertenecen a L1 y L2.
 ;;
 ;; <lista> := () | (<SchemeValue> <lista>)
 
@@ -64,7 +65,8 @@ Christian Vargas 2179172
 ;; Propósito:
 ;; L -> L' : Retorna una lista con cada elemento de L asociado a un
 ;;           nivel de paréntesis mayor comparado con su estado original.
-;; <lista> := ( {<valor-de-scheme>}* )
+;;
+;; <lista> := ( {<SchemeValue>}* )
 
 (define down
   (lambda (list-of-values)
@@ -86,6 +88,7 @@ Christian Vargas 2179172
 ;; Propósito:
 ;; P x L -> L' : Retorna una lista que contiene los elementos
 ;;               que pertenecen a L y que satisfacen el predicado P.
+;;
 ;; <lista> := () | (<SchemeValue> <lista>)
 
 (define filter-in
@@ -146,6 +149,7 @@ Christian Vargas 2179172
 ;; Propósito:
 ;; L1 x L2 -> L' : Retorna una L' de tuplas que representen el producto
 ;;                 cartesiano entre L1 y L2.
+;;
 ;; <lista> := () | (<SchemeValue> <lista>)
 
 (define cartesian-product
@@ -163,11 +167,15 @@ Christian Vargas 2179172
 (cartesian-product '(p q r) '(5 6 7))
 (cartesian-product '("j" q 1) '(h 7 "n"))
 
+
+
+;; ********************* Problema 11 *********************
 ;; zip
 ;; Propósito:
 ;; F x L1 x L2 -> L' : Retorna una L' donde la posicion n-ésima corresponde
-;;                     al resultado de aplicar la funcion F sobre los elementos en la
-;;                     posicion n-esima en L1 y L2.
+;;                     al resultado de aplicar la funcion F sobre los elementos
+;;                     en la posicion n-esima en L1 y L2.
+;;
 ;; <lista> := () | (<SchemeValue> <lista>)
 
 (define zip
@@ -182,10 +190,14 @@ Christian Vargas 2179172
 (zip string-append '("Ho" "co" "es") '("la" "mo" "tas"))
 (zip eqv? '(a 1 "es") '(a "mo" "es"))
 
+
+
+;; ********************* Problema 13 *********************
 ;; operate
 ;; Propósito:
 ;; lrators x lrands -> number : Retorna un number de aplicar sucesivamente las operaciones
 ;;                              en lrators a los valores en lrands.
+;;
 ;; <lrands>  := () | (<number> <lista>)
 ;; <lrators> := () | (<binSymbol> <lista>)
 
@@ -200,6 +212,9 @@ Christian Vargas 2179172
 (operate (list + * + - *) '(1 2 8 4 11 6))
 (operate (list *) '(4 5))
 
+
+
+;; ********************* Problema 16 *********************
 ;; Operar-binarias
 ;; Propósito:
 ;; OperacionB -> int : Retorna el int resultante de hacer operaciones suma, resta y multiplicacion
