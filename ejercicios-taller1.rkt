@@ -133,8 +133,8 @@ Christian Vargas 2179172
               [(null? l) #f]
               [(pred? (car l)) counter]
               [else (list-index-aux pred? (cdr l) (+ counter 1))]))))
-    
-    (list-index-aux predicate? list-of-values 0))))
+
+      (list-index-aux predicate? list-of-values 0))))
 
 ;; Pruebas
 (list-index number? '(a 2 (1 3) b 7))
@@ -166,6 +166,67 @@ Christian Vargas 2179172
 (cartesian-product '(a b c) '(x y))
 (cartesian-product '(p q r) '(5 6 7))
 (cartesian-product '("j" q 1) '(h 7 "n"))
+
+
+
+;; ********************* Problema 8 *********************
+;; mapping
+;; Propósito:
+;; F x L1 X L2 -> L : Retorna una lista L de pares (a, b), donde a es un
+;;                    elemento de L1 y b es un elemento de L2, tal que se
+;;                    cumple que F(a) = b.
+;;                    a y b son elementos en la misma posición en L1 y L2.
+;;
+;; <lista> := ( {<int>}* )
+
+(define mapping
+  (lambda (function list1 list2)
+    (cond
+      [(null? list1)
+       empty]
+      [(eqv? (function (car list1)) (car list2))
+       (cons (list (car list1) (car list2)) (mapping function (cdr list1) (cdr list2)))]
+      [else
+       (mapping function (cdr list1) (cdr list2))])))
+
+;; Pruebas
+(mapping (lambda (d) (* d 2)) (list 1 2 3) (list 2 4 6))
+(mapping (lambda (d) (* d 3)) (list 1 2 2) (list 2 4 6))
+(mapping (lambda (d) (* d 2)) (list 1 2 3) (list 3 9 12))
+(mapping (lambda (d) (* d 10)) (list 1 2 3) (list 20 10 30))
+
+
+
+;; ********************* Problema 10 *********************
+;; up
+;; Propósito:
+;; L -> L': Retorna una lista L' donde son removidos los paréntesis de los elementos
+;;          que están en el nivel más alto de la lista original L.
+;;          Si un elemento del nivel más alto de L no tiene paréntesis, es incluido
+;;          en L' sin sufrir ninguna modificación.
+;;
+;; <lista> := ( {<SchemeValue>}* )
+
+(define up
+  (lambda (list-of-values)      
+      (cond
+        [(null? list-of-values)
+         empty]
+        [(list? (car list-of-values))
+         (mi-append (car list-of-values) (up (cdr list-of-values)))]
+        [else
+         (cons (car list-of-values) (up (cdr list-of-values)))])))
+
+;; Pruebas
+(up '((1 2) (3 4)))
+(up '((x (y)) z))
+(up '(1 2 3 4 (a b ((c)) 10) x (y) (((z))) "fin"))
+
+
+      
+        
+
+
 
 
 
