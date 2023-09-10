@@ -84,7 +84,7 @@
 
 
 ;; filter-acum :
-;; Proposito: retornar la operac
+;; Proposito: 
 ;; a x b x F x acum x filter -> x: El procedimiento filter-acum aplicara la
 ;; funcion binaria F a todos los elementos que estan en el intervalo [a; b] y que
 ;; a su vez todos estos elementos cumplen con el predicado de la funcion filter,
@@ -108,5 +108,31 @@
 (filter-acum 1 10 + 0 even?)
 
 
-  
+;; pascal :
+;; Proposito: 
+;; N -> 'L:
+
+
+(define pascal
+  (lambda (n)
+    (cond
+      [(zero? n) '()]
+      [(= n 1) '(1)]
+      [else
+       (letrec
+        (
+         (calc-fila
+          (lambda (x f-act f-ant)
+            (if (= x 2) (cons 1 f-act)
+                (calc-fila (- x 1) (cons (+ (car f-ant) (cadr f-ant)) f-act) (cdr f-ant))
+                )
+            )
+          )
+         )
+         (calc-fila n '(1) (pascal (- n 1)))
+         )
+       ]
+      )
+    )
+  )
             
