@@ -224,18 +224,12 @@ Christian Vargas 2179172
 
 
       
-        
-
-
-
-
-
 ;; ********************* Problema 11 *********************
 ;; zip
 ;; Propósito:
 ;; F x L1 x L2 -> L' : Retorna una L' donde la posicion n-ésima corresponde
 ;;                     al resultado de aplicar la funcion F sobre los elementos
-;;                     en la posicion n-esima en L1 y L2.
+;;                     en la posicion n-ésima en L1 y L2.
 ;;
 ;; <lista> := () | (<SchemeValue> <lista>)
 
@@ -256,8 +250,8 @@ Christian Vargas 2179172
 ;; ********************* Problema 13 *********************
 ;; operate
 ;; Propósito:
-;; lrators x lrands -> number : Retorna un number de aplicar sucesivamente las operaciones
-;;                              en lrators a los valores en lrands.
+;; lrators x lrands -> number : Retorna el número resultante de aplicar sucesivamente
+;;                              las operaciones en lrators a los valores en lrands.
 ;;
 ;; <lrands>  := () | (<number> <lista>)
 ;; <lrators> := () | (<binSymbol> <lista>)
@@ -275,16 +269,46 @@ Christian Vargas 2179172
 
 
 
+;; ********************* Problema 14 *********************
+;; path
+;; Propósito:
+;; n X tree -> L : Retorna el camino que se debe seguir en el árbol binario de búsqueda
+;;                 ingresado, para llegar hasta el número entero n. Este camino es una lista
+;;                 de cadenas, donde se indica la dirección a tomar en cada nodo: <-left o right->.
+;;                 Si el número n se encuentra en la raíz del árbol, se devuelve la lista vacía.
+;;                 El árbol debe contener el número n.
+;;
+;; <árbol-binario-búsqueda> := ()
+;;                          := ( <int> <árbol-binario-búsqueda> <árbol-binario-búsqueda> )
+
+(define path
+  (lambda (n tree)
+    (cond
+      [(eqv? n (car tree))
+       empty]
+      [(< n (car tree))
+       (cons 'left (path n (cadr tree)))]
+      [else
+       (cons 'right (path n (caddr tree)))])))
+
+;; Pruebas
+(path 17 '(14 (7 () (12 () ())) (26 (20 (17 () ()) ()) (31 () ()))))
+(path 13 '(8 (3 (1 () ()) (6 (4 () ()) (7 () ()))) (10 () (14 (13 () ()) ()))))
+(path 2 '(2 (1 () ()) (3 () ())))
+
+
+
 ;; ********************* Problema 16 *********************
 ;; Operar-binarias
 ;; Propósito:
-;; OperacionB -> int : Retorna el int resultante de hacer operaciones suma, resta y multiplicacion
+;; OperacionB -> int : Retorna el número resultante de aplicar operaciones suma, resta y multiplicacion
 ;;                     correspondientes segun la OperacionB.
 ;;
 ;; <OperacionB> := <int>
 ;;              := <OperacionB> ’suma <OperacionB>)
 ;;              := <OperacionB> ’resta <OperacionB>)
 ;;              := <OperacionB> ’multiplica <OperacionB>)
+
 (define Operar-binarias
   (lambda (OperacionB)
     (if(number? OperacionB)
@@ -299,3 +323,43 @@ Christian Vargas 2179172
 (Operar-binarias '(2 multiplica 9))
 (Operar-binarias '((2 multiplica 3)suma(5 resta 1 )))
 (Operar-binarias '((2 multiplica(4 suma 1))multiplica((2 multiplica 4)resta 1)))
+
+
+
+;; ********************* Problema 17 *********************
+;; prod-scalar-matriz
+;; Propósito:
+;; mat X vec -> mat' : Retorna la matriz resultante de multiplicar término a término 
+;;                     cada fila de la matriz de entrada con el vector ingresado.
+;;                     El número de columnas en la matriz debe ser igual que la
+;;                     longitud del vector.
+;;
+;; prod-vec-aux
+;; Propósito:
+;; vec1 X vec2 -> vec' : Retorna el vector resultante de multiplicar término a término
+;;                       los dos vectores ingresados como parámetro.
+;;
+;; <matriz> := ( {<vector>}+ ) 
+;; <vector> := ( {<int>}+ )
+;; Restricción: la longitud de los vectores en una matriz debe ser la misma. 
+
+(define prod-scalar-matriz
+  (lambda (mat vec)
+    (letrec
+     ((prod-vec-aux
+       (lambda (vector1 vector2)
+         (if (null? vector1)
+             empty
+             (cons
+              (* (car vector1) (car vector2))
+              (prod-vec-aux (cdr vector1) (cdr vector2)))))))
+
+      (if (null? mat)
+          empty
+          (cons
+           (prod-vec-aux (car mat) vec)
+           (prod-scalar-matriz (cdr mat) vec))))))
+
+;; Pruebas
+(prod-scalar-matriz '((1 1) (2 2)) '(2 3))
+(prod-scalar-matriz '((1 1) (2 2) (3 3)) '(2 3))
