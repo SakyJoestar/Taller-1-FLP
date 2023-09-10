@@ -1,37 +1,74 @@
-;; Nombre
-;; Samuel Galindo 2177491
-;; Nombre
-;; Nicolas Herrera 2182551
+#|
+Fundamentos de Interpretación y Compilación de Lenguajes de Programación
+750017C - G01
+
+Taller 1: Definición recursiva de programas e inducción
+
+Autores:
+Samuel Galindo 2177491
+Nicolás Herrera 2182551
+Christian Vargas 2179172
+|#
+
 
 #lang eopl
 
+
+
+;; ********************* Problema 1 *********************
 ;; invert:
-;; Proposito:
+;; Propósito:
 ;; L -> L' : Invierte los pares de L.
 ;;
-;; <lista> ::= () | (<par> <lista>)
-;; <par>   ::= (<elemento> <elemento>)
-;; <elemento>   ::= <number> | <symbol> | <string>
+;; <lista> := () | (<par> <lista>)
+;; <par>   := (<elemento> <elemento>)
+;; <elemento>   := <number> | <symbol> | <string>
 
 (define invert
   (lambda(L)
     (if (null? L)
-    '()
-    (cons
-     (list (cadr(car L)) (car(car L)))
-     (invert(cdr L))))))
+        '()
+        (cons
+         (list (cadr(car L)) (car(car L)))
+         (invert(cdr L))))))
 
 ;; Pruebas
 (invert '((a 1) (a 2) (1 b) (2 b)))
 (invert '((5 9) (10 91) (82 7) (a e) ("hola" "Mundo")))
 (invert '(("es" "racket") ("genial" "muy") (17 29) (81 o)))
 
+
+
+;; ********************* Problema 2 *********************
+;; down:
+;; Propósito:
+;; L -> L' : Retorna una lista con cada elemento de L asociado a un
+;;           nivel de paréntesis mayor comparado con su estado original.
+;; <lista> := ( {<valor-de-scheme>}* )
+
+(define down
+  (lambda (list-of-values)
+    (if (null? list-of-values)
+        '()
+        (cons
+         (list (car list-of-values))
+         (down (cdr list-of-values))))))
+
+;; Pruebas
+(down '(1 2 3))
+(down '((una) (buena) (idea)))
+(down '(un (objeto (mas)) complicado))
+
+
+
+;; ********************* Problema 4 *********************
 ;; filter-in:
-;; Proposito:
-;; P x L -> L' : Retorna una lista que contiene los elementos que pertenecen a L y que satisfacen el predicado P
+;; Propósito:
+;; P x L -> L' : Retorna una lista que contiene los elementos
+;;               que pertenecen a L y que satisfacen el predicado P.
 ;;
-;; <lista> ::= () | (<elemento> <lista>)
-;; <elemento>   ::= <number> | <symbol> | <string>
+;; <lista> := () | (<elemento> <lista>)
+;; <elemento>   := <number> | <symbol> | <string>
 
 (define filter-in
   (lambda (P L)
@@ -46,12 +83,54 @@
 (filter-in symbol? '(a (b c) 17 foo))
 (filter-in string? '(a b u "univalle" "racket" "flp" 28 90 (1 2 3)))
 
-;; cartesian-product
-;; Proposito:
-;; L1 x L2 -> L' : Retorna una L' de tuplas que representen el producto cartesiano entre L1 y L2.
+
+
+;; ********************* Problema 5 *********************
+;; list-index
+;; Propósito:
+;; P X L -> int | boolean :  Retorna la posición del primer elemento en
+;;                           en la lista que satisface el predicado dado.
+;;                           Si ningún elemento satisface el predicado,
+;;                           retorna #f
 ;;
-;; <lista> ::= () | (<elemento> <lista>)
-;; <elemento>   ::= <number> | <symbol> | <string>
+;; list-index-aux
+;; Propósito:
+;; P X L X int -> int | boolean: Función auxiliar de tipo recursivo de cola
+;;                               que lleva conteo de la posición sobre la que
+;;                               se está iterando en la lista. Este contador permite
+;;                               cubrir funcionalmente el caso en el que algún elemento
+;;                               de la lista sí cumpla con el predicado ingresado. 
+;;
+;; <lista> := ( {<valor-de-scheme>}* )
+
+(define list-index
+  (lambda (predicate? list-of-values) 
+    (letrec
+        ((list-index-aux
+          (lambda (pred? l counter)
+            (cond
+              [(null? l) #f]
+              [(pred? (car l)) counter]
+              [else (list-index-aux pred? (cdr l) (+ counter 1))]))))
+    
+    (list-index-aux predicate? list-of-values 0))))
+
+;; Pruebas
+(list-index number? '(a 2 (1 3) b 7))
+(list-index symbol? '(a (b c) 17 foo))
+(list-index symbol? '(1 2 (a b) 3))
+(list-index string? '(1 2 3 4 "string" a 10))
+
+
+
+;; ********************* Problema 7 *********************
+;; cartesian-product
+;; Propósito:
+;; L1 x L2 -> L' : Retorna una L' de tuplas que representen el producto
+;;                 cartesiano entre L1 y L2.
+;;
+;; <lista> := () | (<elemento> <lista>)
+;; <elemento>   := <number> | <symbol> | <string>
 
 (define cartesian-product
   (lambda (L1 L2)
@@ -71,8 +150,8 @@
 ;; Proposito:
 ;; F x L1 x L2 -> L' : Retorna una L' donde la posicion n-esima corresponde al resultado de aplicar la funcion F sobre los elementos en la posicion n-esima en L1 y L2.
 ;;
-;; <lista> ::= () | (<elemento> <lista>)
-;; <elemento>   ::= <number> | <symbol> | <string>
+;; <lista> := () | (<elemento> <lista>)
+;; <elemento>   := <number> | <symbol> | <string>
 
 (define zip
   (lambda (F L1 L2)
@@ -88,8 +167,8 @@
 ;; Proposito:
 ;; lrators x lrands -> number : Retorna un number de aplicar sucesivamente las operaciones en lrators a los valores en lrands.
 ;;
-;; <lrands> ::= () | (<number> <lista>)
-;; <lrators> ::= () | (<symbol> <lista>)
+;; <lrands> := () | (<number> <lista>)
+;; <lrators> := () | (<symbol> <lista>)
 
 (define operate
   (lambda (lrators lrands)
@@ -106,10 +185,10 @@
 ;; Proposito:
 ;; OperacionB -> int : Retorna el int de hacer operaciones suma, resta y multiplicacion correspondientes segun la OperacionB.
 ;;
-;; <OperacionB> ::= <int>
-;;              ::= <OperacionB> ’suma <OperacionB>)
-;;              ::= <OperacionB> ’resta <OperacionB>)
-;;              ::= <OperacionB> ’multiplica <OperacionB>)
+;; <OperacionB> := <int>
+;;              := <OperacionB> ’suma <OperacionB>)
+;;              := <OperacionB> ’resta <OperacionB>)
+;;              := <OperacionB> ’multiplica <OperacionB>)
 (define Operar-binarias
   (lambda (OperacionB)
     (if(number? OperacionB)
