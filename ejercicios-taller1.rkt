@@ -4,10 +4,13 @@
 
 #lang eopl
 
+;; ********************* Problema 3 *********************
 ;; list-set :
 ;; Proposito:
 ;; L x N x X -> 'L: retorna una lista similar a la que recibe (L), pero
 ;; debe tener en la posicion ingresada n (indexando desde cero) el elemento x.
+;;
+;; <lista> := () | (<SchemeValue> <lista>)
 
 (define list-set 
   (lambda(L n x)
@@ -21,16 +24,17 @@
 ;; Pruebas
 (list-set '(a b c d) 2 '(1 2))
 (list-set '(a b c d) 3 '(1 5 10))
-    
+
+
+
+;; ********************* Problema 6 *********************
 ;; swapper :
 ;; Proposito:
 ;; E1 x E2 x L -> 'L: retorna una lista similar a L, solo que cada ocurrencia
-;; anterior de E1 sera reemplazada por E2y cada ocurrencia anterior de E2
+;; anterior de E1 sera reemplazada por E2 y cada ocurrencia anterior de E2
 ;; sera reemplazada por E1 (Los elementos E1 y E2 deben pertenecer a L).
-;; retorna una listasimilar a L, solo que cada ocurrencia anterior de E1
-;; sera reemplazada por E2 y cada ocurrencia anterior de E2 sera reemplazada
-;; por E1 (Los elementos E1 y E2 deben pertenecer a L).
-
+;;
+;; <lista> := () | (<SchemeValue> <lista>)
 
 (define swapper 
   (lambda(E1 E2 L)
@@ -49,11 +53,14 @@
 (swapper 'x 'y '(y y x y x y x x y))
 
 
+;; ********************* Problema 9 *********************
 ;; inversions :
 ;; Proposito:
 ;; L -> x: determina el numero de inversiones de la lista L. De manera formal,
 ;; sea A = (a1a2:::an) una lista de n numeros diferentes, si i < j (posicion)
 ;; y ai > aj (dato en la posicion) entonces la pareja (i j) es una inversion de A.
+;;
+;; <lista> := ( {<int>}* )
 
 (define inversions
   (lambda (L)
@@ -83,12 +90,14 @@
 (inversions '(3 2 1))
 
 
+
+;; ********************* Problema 12 *********************
 ;; filter-acum :
 ;; Proposito: 
 ;; a x b x F x acum x filter -> x: El procedimiento filter-acum aplicara la
 ;; funcion binaria F a todos los elementos que estan en el intervalo [a; b] y que
 ;; a su vez todos estos elementos cumplen con el predicado de la funcion filter,
-;; el resultado se debe ir conservando en acum y debe retornarse el valor final
+;; el resultado se debe ir conservando en acum y debe retornar el valor final
 ;; de acum.
 
 (define filter-acum
@@ -108,10 +117,11 @@
 (filter-acum 1 10 + 0 even?)
 
 
+
+;; ********************* Problema 18 *********************
 ;; pascal :
 ;; Proposito: 
-;; N -> 'L:
-
+;; N -> 'L: retorna la fila N del triangulo de Pascal.
 
 (define pascal
   (lambda (n)
@@ -135,4 +145,10 @@
       )
     )
   )
-            
+
+;; Pruebas
+(pascal 1)
+(pascal 2)
+(pascal 3)
+(pascal 4)
+(pascal 5)
