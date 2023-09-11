@@ -298,6 +298,46 @@ Christian Vargas 2179172
 
 
 
+;; ********************* Problema 15 *********************
+;; count-odd-and-even
+;; Propósito:
+;; tree -> L : Retorna una lista con dos elementos, el primero de ellos representa la cantidad
+;;             de números pares en el árbol y el segundo la cantidad de impares.
+;;
+;; sum-of-pairs
+;; Propósito:
+;; pair1 x pair2 -> pair' : Retorna el par obtenido al sumar los elementos correspondientes
+;;                          de los pares ingresados como argumento. 
+;;
+;;
+;; <árbol-binario> := ()
+;;                 := ( <int> <árbol-binario> <árbol-binario> )
+;;
+;; <par> := (<int> <int>)
+
+(define count-odd-and-even
+  (lambda (tree)
+    (let
+        ((sum-of-pairs
+          (lambda (pair1 pair2)
+            (list (+ (car pair1) (car pair2)) (+ (cadr pair1) (cadr pair2))))))
+      (cond
+        [(null? tree)
+         (list 0 0)]
+        [(even? (car tree))
+         (sum-of-pairs(sum-of-pairs (list 1 0) (count-odd-and-even (cadr tree)))
+                      (count-odd-and-even (caddr tree)))]
+        [else
+         (sum-of-pairs(sum-of-pairs (list 0 1) (count-odd-and-even (cadr tree)))
+                      (count-odd-and-even (caddr tree)))]))))
+
+;; Pruebas:
+(count-odd-and-even '(14 (7 () (12 () ())) (26 (20 (17 () ())())(31 () ()))))
+(count-odd-and-even '(8 (3 (1 () ()) (6 (4 () ()) (7 () ()))) (10 () (14 (13 () ()) ()))))
+        
+      
+
+
 ;; ********************* Problema 16 *********************
 ;; Operar-binarias
 ;; Propósito:
