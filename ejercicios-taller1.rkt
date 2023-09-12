@@ -1,7 +1,7 @@
 #|
 Fundamentos de Interpretación y Compilación de Lenguajes de Programación
 750017C - G01
-
+=======
 Taller 1: Definición recursiva de programas e inducción
 
 Autores:
@@ -10,14 +10,11 @@ Nicolás Herrera 2182551
 Christian Vargas 2179172
 |#
 
-
 #lang eopl
-
-
 
 ;; ********************* Funciones propias *********************
 ;; mi-append
-;; Proposito:
+;; Propósito:
 ;; L1 x L2 -> L' : Retorna una lista que contiene los elementos
 ;;                 que pertenecen a L1 y L2.
 ;;
@@ -83,6 +80,29 @@ Christian Vargas 2179172
 
 
 
+;; ********************* Problema 3 *********************
+;; list-set :
+;; Propósito:
+;; L x N x X -> 'L: retorna una lista similar a la que recibe (L), pero
+;; debe tener en la posición ingresada n (indexando desde cero) el elemento x.
+;;
+;; <lista> := () | (<SchemeValue> <lista>)
+
+(define list-set 
+  (lambda(L n x)
+    (if (zero? n)
+      (cons x (cdr L))
+      (cons (car L) (list-set (cdr L) (- n 1) x))
+      )
+    )
+  )
+   
+;; Pruebas
+(list-set '(a b c d) 2 '(1 2))
+(list-set '(a b c d) 3 '(1 5 10))
+
+
+
 ;; ********************* Problema 4 *********************
 ;; filter-in:
 ;; Propósito:
@@ -122,7 +142,7 @@ Christian Vargas 2179172
 ;;                               cubrir funcionalmente el caso en el que algún elemento
 ;;                               de la lista sí cumpla con el predicado ingresado. 
 ;;
-;; <lista> := ( {<valor-de-scheme>}* )
+;; <lista> := ( {<<SchemeValue>}* )
 
 (define list-index
   (lambda (predicate? list-of-values) 
@@ -141,6 +161,33 @@ Christian Vargas 2179172
 (list-index symbol? '(a (b c) 17 foo))
 (list-index symbol? '(1 2 (a b) 3))
 (list-index string? '(1 2 3 4 "string" a 10))
+
+
+
+;; ********************* Problema 6 *********************
+;; swapper :
+;; Propósito:
+;; E1 x E2 x L -> 'L: retorna una lista similar a L, solo que cada ocurrencia
+;; anterior de E1 será reemplazada por E2 y cada ocurrencia anterior de E2
+;; será reemplazada por E1 (Los elementos E1 y E2 deben pertenecer a L).
+;;
+;; <lista> := () | (<SchemeValue> <lista>)
+
+(define swapper 
+  (lambda(E1 E2 L)
+    (cond
+      [(null? L) '()]
+      [(eqv?  E1 (car L)) (cons E2 (swapper E1 E2 (cdr L)))]
+      [(eqv?  E2 (car L)) (cons E1 (swapper E1 E2 (cdr L)))]
+      [else (cons(car L) (swapper E1 E2 (cdr L)))]
+      )
+    )
+  )
+
+;; Pruebas
+(swapper 'a 'd '(a b c d))
+(swapper 'a 'd '(a d () c d))
+(swapper 'x 'y '(y y x y x y x x y))
 
 
 
@@ -197,6 +244,47 @@ Christian Vargas 2179172
 
 
 
+;; ********************* Problema 9 *********************
+;; inversions :
+;; Propósito:
+;; L -> x: determina el número de inversiones de la lista L. De manera formal,
+;; sea A una lista de n números diferentes, si i < j (posición)
+;; y ai > aj (dato en la posición) entonces la pareja (i j) es una inversión de A.
+;;
+;; compare
+;; Propósito:
+;; n x l -> 'L : compara si el elemento de la lista es una inversión, si lo es suma 1 y si no 0.
+;; <lista> := ( {<int>}* )
+
+(define inversions
+  (lambda (L)
+    (if (null? L)
+     0
+    (letrec
+        (
+         (compare
+          (lambda (n l)
+            (cond
+              [(null? l) 0]
+              [(> n (car l)) (+ 1 (compare n (cdr l)))]
+              [ else (compare n (cdr l))]
+              )
+            )
+          )
+         )
+      (+ (compare (car L) (cdr L)) (inversions (cdr L)))
+      )
+    )
+    )
+  )
+
+;; Pruebas
+(inversions '(2 3 8 6 1))
+(inversions '(1 2 3 4))
+(inversions '(3 2 1))
+
+
+
 ;; ********************* Problema 10 *********************
 ;; up
 ;; Propósito:
@@ -227,9 +315,9 @@ Christian Vargas 2179172
 ;; ********************* Problema 11 *********************
 ;; zip
 ;; Propósito:
-;; F x L1 x L2 -> L' : Retorna una L' donde la posicion n-ésima corresponde
-;;                     al resultado de aplicar la funcion F sobre los elementos
-;;                     en la posicion n-ésima en L1 y L2.
+;; F x L1 x L2 -> L' : Retorna una L' donde la posición n-ésima corresponde
+;;                     al resultado de aplicar la función F sobre los elementos
+;;                     en la posición n-ésima en L1 y L2.
 ;;
 ;; <lista> := () | (<SchemeValue> <lista>)
 
@@ -244,6 +332,38 @@ Christian Vargas 2179172
 (zip * '(11 5 6) '(10 9 8))
 (zip string-append '("Ho" "co" "es") '("la" "mo" "tas"))
 (zip eqv? '(a 1 "es") '(a "mo" "es"))
+
+
+
+;; ********************* Problema 12 *********************
+;; filter-acum :
+;; Propósito: 
+;; a x b x F x acum x filter -> x: El procedimiento filter-acum aplicará la
+;; función binaria F a todos los elementos que están en el intervalo [a; b] y que
+;; a su vez todos estos elementos cumplen con el predicado de la función filter,
+;; el resultadose se debe ir conservando en acum y debe retornar el valor final
+;; de acum.
+;;
+;; <OperacionB> := <int>
+;;              := <OperacionB> ’suma <OperacionB>)
+;;              := <OperacionB> ’resta <OperacionB>)
+;;              := <OperacionB> ’multiplica <OperacionB>)
+
+(define filter-acum
+  (lambda (a b F acum filter)
+    (if (<= a b)
+        (if (filter a)
+            (filter-acum (+ a 1) b F (F a acum) filter)
+            (filter-acum (+ a 1) b F acum filter)
+            )
+        acum
+        )
+    )
+  )
+
+;; Pruebas
+(filter-acum 1 10 + 0 odd?)
+(filter-acum 1 10 + 0 even?)
 
 
 
@@ -403,3 +523,44 @@ Christian Vargas 2179172
 ;; Pruebas
 (prod-scalar-matriz '((1 1) (2 2)) '(2 3))
 (prod-scalar-matriz '((1 1) (2 2) (3 3)) '(2 3))
+
+
+
+;; ********************* Problema 18 *********************
+;; pascal :
+;; Propósito: 
+;; N -> 'L: retorna la fila N del triángulo de Pascal.
+;;
+;; calc-fila
+;; Propósito:
+;; X x f-act x f-ant -> 'L : Calcula la fila X concatenando la actual y basandose en la anterior para calcular.
+
+(define pascal
+  (lambda (n)
+    (cond
+      [(zero? n) '()]
+      [(= n 1) '(1)]
+      [else
+       (letrec
+        (
+         (calc-fila
+          (lambda (x f-act f-ant)
+            (if (= x 2) (cons 1 f-act)
+                (calc-fila (- x 1) (cons (+ (car f-ant) (cadr f-ant)) f-act) (cdr f-ant))
+                )
+            )
+          )
+         )
+         (calc-fila n '(1) (pascal (- n 1)))
+         )
+       ]
+      )
+    )
+  )
+
+;; Pruebas
+(pascal 1)
+(pascal 2)
+(pascal 3)
+(pascal 4)
+(pascal 5)
