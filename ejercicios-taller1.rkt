@@ -1,7 +1,7 @@
 #|
 Fundamentos de Interpretación y Compilación de Lenguajes de Programación
 750017C - G01
-
+=======
 Taller 1: Definición recursiva de programas e inducción
 
 Autores:
@@ -10,10 +10,7 @@ Nicolás Herrera 2182551
 Christian Vargas 2179172
 |#
 
-
 #lang eopl
-
-
 
 ;; ********************* Funciones propias *********************
 ;; mi-append
@@ -83,6 +80,29 @@ Christian Vargas 2179172
 
 
 
+;; ********************* Problema 3 *********************
+;; list-set :
+;; Proposito:
+;; L x N x X -> 'L: retorna una lista similar a la que recibe (L), pero
+;; debe tener en la posicion ingresada n (indexando desde cero) el elemento x.
+;;
+;; <lista> := () | (<SchemeValue> <lista>)
+
+(define list-set 
+  (lambda(L n x)
+    (if (zero? n)
+      (cons x (cdr L))
+      (cons (car L) (list-set (cdr L) (- n 1) x))
+      )
+    )
+  )
+   
+;; Pruebas
+(list-set '(a b c d) 2 '(1 2))
+(list-set '(a b c d) 3 '(1 5 10))
+
+
+
 ;; ********************* Problema 4 *********************
 ;; filter-in:
 ;; Propósito:
@@ -143,6 +163,32 @@ Christian Vargas 2179172
 (list-index string? '(1 2 3 4 "string" a 10))
 
 
+;; ********************* Problema 6 *********************
+;; swapper :
+;; Proposito:
+;; E1 x E2 x L -> 'L: retorna una lista similar a L, solo que cada ocurrencia
+;; anterior de E1 sera reemplazada por E2 y cada ocurrencia anterior de E2
+;; sera reemplazada por E1 (Los elementos E1 y E2 deben pertenecer a L).
+;;
+;; <lista> := () | (<SchemeValue> <lista>)
+
+(define swapper 
+  (lambda(E1 E2 L)
+    (cond
+      [(null? L) '()]
+      [(eqv?  E1 (car L)) (cons E2 (swapper E1 E2 (cdr L)))]
+      [(eqv?  E2 (car L)) (cons E1 (swapper E1 E2 (cdr L)))]
+      [else (cons(car L) (swapper E1 E2 (cdr L)))]
+      )
+    )
+  )
+
+;; Pruebas
+(swapper 'a 'd '(a b c d))
+(swapper 'a 'd '(a d () c d))
+(swapper 'x 'y '(y y x y x y x x y))
+
+
 
 ;; ********************* Problema 7 *********************
 ;; cartesian-product
@@ -196,6 +242,46 @@ Christian Vargas 2179172
 (mapping (lambda (d) (* d 10)) (list 1 2 3) (list 20 10 30))
 
 
+;; ********************* Problema 9 *********************
+;; inversions :
+;; Proposito:
+;; L -> x: determina el numero de inversiones de la lista L. De manera formal,
+;; sea A una lista de n numeros diferentes, si i < j (posicion)
+;; y ai > aj (dato en la posicion) entonces la pareja (i j) es una inversion de A.
+;;
+;; compare
+;; Propósito:
+;; n x l -> 'L : compara si el elemento de la lista es una inversion, si lo es suma 1 y si no 0.
+;; <lista> := ( {<int>}* )
+
+(define inversions
+  (lambda (L)
+    (if (null? L)
+     0
+    (letrec
+        (
+         (compare
+          (lambda (n l)
+            (cond
+              [(null? l) 0]
+              [(> n (car l)) (+ 1 (compare n (cdr l)))]
+              [ else (compare n (cdr l))]
+              )
+            )
+          )
+         )
+      (+ (compare (car L) (cdr L)) (inversions (cdr L)))
+      )
+    )
+    )
+  )
+
+;; Pruebas
+(inversions '(2 3 8 6 1))
+(inversions '(1 2 3 4))
+(inversions '(3 2 1))
+
+
 
 ;; ********************* Problema 10 *********************
 ;; up
@@ -244,6 +330,37 @@ Christian Vargas 2179172
 (zip * '(11 5 6) '(10 9 8))
 (zip string-append '("Ho" "co" "es") '("la" "mo" "tas"))
 (zip eqv? '(a 1 "es") '(a "mo" "es"))
+
+
+;; ********************* Problema 12 *********************
+;; filter-acum :
+;; Proposito: 
+;; a x b x F x acum x filter -> x: El procedimiento filter-acum aplicara la
+;; funcion binaria F a todos los elementos que estan en el intervalo [a; b] y que
+;; a su vez todos estos elementos cumplen con el predicado de la funcion filter,
+;; el resultadose debe ir conservando en acum y debe retornar el valor final
+;; de acum.
+;;
+;; <OperacionB> := <int>
+;;              := <OperacionB> ’suma <OperacionB>)
+;;              := <OperacionB> ’resta <OperacionB>)
+;;              := <OperacionB> ’multiplica <OperacionB>)
+
+(define filter-acum
+  (lambda (a b F acum filter)
+    (if (<= a b)
+        (if (filter a)
+            (filter-acum (+ a 1) b F (F a acum) filter)
+            (filter-acum (+ a 1) b F acum filter)
+            )
+        acum
+        )
+    )
+  )
+
+;; Pruebas
+(filter-acum 1 10 + 0 odd?)
+(filter-acum 1 10 + 0 even?)
 
 
 
@@ -295,6 +412,43 @@ Christian Vargas 2179172
 (path 17 '(14 (7 () (12 () ())) (26 (20 (17 () ()) ()) (31 () ()))))
 (path 13 '(8 (3 (1 () ()) (6 (4 () ()) (7 () ()))) (10 () (14 (13 () ()) ()))))
 (path 2 '(2 (1 () ()) (3 () ())))
+
+;; ********************* Problema 15 *********************
+;; count-odd-and-even
+;; Propósito:
+;; tree -> L : Retorna una lista con dos elementos, el primero de ellos representa la cantidad
+;;             de números pares en el árbol y el segundo la cantidad de impares.
+;;
+;; sum-of-pairs
+;; Propósito:
+;; pair1 x pair2 -> pair' : Retorna el par obtenido al sumar los elementos correspondientes
+;;                          de los pares ingresados como argumento. 
+;;
+;;
+;; <árbol-binario> := ()
+;;                 := ( <int> <árbol-binario> <árbol-binario> )
+;;
+;; <par> := (<int> <int>)
+
+(define count-odd-and-even
+  (lambda (tree)
+    (let
+        ((sum-of-pairs
+          (lambda (pair1 pair2)
+            (list (+ (car pair1) (car pair2)) (+ (cadr pair1) (cadr pair2))))))
+      (cond
+        [(null? tree)
+         (list 0 0)]
+        [(even? (car tree))
+         (sum-of-pairs(sum-of-pairs (list 1 0) (count-odd-and-even (cadr tree)))
+                      (count-odd-and-even (caddr tree)))]
+        [else
+         (sum-of-pairs(sum-of-pairs (list 0 1) (count-odd-and-even (cadr tree)))
+                      (count-odd-and-even (caddr tree)))]))))
+
+;; Pruebas:
+(count-odd-and-even '(14 (7 () (12 () ())) (26 (20 (17 () ())())(31 () ()))))
+(count-odd-and-even '(8 (3 (1 () ()) (6 (4 () ()) (7 () ()))) (10 () (14 (13 () ()) ()))))
 
 
 
@@ -363,3 +517,42 @@ Christian Vargas 2179172
 ;; Pruebas
 (prod-scalar-matriz '((1 1) (2 2)) '(2 3))
 (prod-scalar-matriz '((1 1) (2 2) (3 3)) '(2 3))
+
+;; ********************* Problema 18 *********************
+;; pascal :
+;; Proposito: 
+;; N -> 'L: retorna la fila N del triangulo de Pascal.
+;;
+;; calc-fila
+;; Propósito:
+;; X x f-act x f-ant -> 'L : Calcula la fila X concatenando la actual y basandose en la anterior para calcular.
+
+(define pascal
+  (lambda (n)
+    (cond
+      [(zero? n) '()]
+      [(= n 1) '(1)]
+      [else
+       (letrec
+        (
+         (calc-fila
+          (lambda (x f-act f-ant)
+            (if (= x 2) (cons 1 f-act)
+                (calc-fila (- x 1) (cons (+ (car f-ant) (cadr f-ant)) f-act) (cdr f-ant))
+                )
+            )
+          )
+         )
+         (calc-fila n '(1) (pascal (- n 1)))
+         )
+       ]
+      )
+    )
+  )
+
+;; Pruebas
+(pascal 1)
+(pascal 2)
+(pascal 3)
+(pascal 4)
+(pascal 5)
