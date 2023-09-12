@@ -14,7 +14,7 @@ Christian Vargas 2179172
 
 ;; ********************* Funciones propias *********************
 ;; mi-append
-;; Proposito:
+;; Propósito:
 ;; L1 x L2 -> L' : Retorna una lista que contiene los elementos
 ;;                 que pertenecen a L1 y L2.
 ;;
@@ -82,9 +82,9 @@ Christian Vargas 2179172
 
 ;; ********************* Problema 3 *********************
 ;; list-set :
-;; Proposito:
+;; Propósito:
 ;; L x N x X -> 'L: retorna una lista similar a la que recibe (L), pero
-;; debe tener en la posicion ingresada n (indexando desde cero) el elemento x.
+;; debe tener en la posición ingresada n (indexando desde cero) el elemento x.
 ;;
 ;; <lista> := () | (<SchemeValue> <lista>)
 
@@ -142,7 +142,7 @@ Christian Vargas 2179172
 ;;                               cubrir funcionalmente el caso en el que algún elemento
 ;;                               de la lista sí cumpla con el predicado ingresado. 
 ;;
-;; <lista> := ( {<valor-de-scheme>}* )
+;; <lista> := ( {<<SchemeValue>}* )
 
 (define list-index
   (lambda (predicate? list-of-values) 
@@ -163,12 +163,13 @@ Christian Vargas 2179172
 (list-index string? '(1 2 3 4 "string" a 10))
 
 
+
 ;; ********************* Problema 6 *********************
 ;; swapper :
-;; Proposito:
+;; Propósito:
 ;; E1 x E2 x L -> 'L: retorna una lista similar a L, solo que cada ocurrencia
-;; anterior de E1 sera reemplazada por E2 y cada ocurrencia anterior de E2
-;; sera reemplazada por E1 (Los elementos E1 y E2 deben pertenecer a L).
+;; anterior de E1 será reemplazada por E2 y cada ocurrencia anterior de E2
+;; será reemplazada por E1 (Los elementos E1 y E2 deben pertenecer a L).
 ;;
 ;; <lista> := () | (<SchemeValue> <lista>)
 
@@ -242,16 +243,17 @@ Christian Vargas 2179172
 (mapping (lambda (d) (* d 10)) (list 1 2 3) (list 20 10 30))
 
 
+
 ;; ********************* Problema 9 *********************
 ;; inversions :
-;; Proposito:
-;; L -> x: determina el numero de inversiones de la lista L. De manera formal,
-;; sea A una lista de n numeros diferentes, si i < j (posicion)
-;; y ai > aj (dato en la posicion) entonces la pareja (i j) es una inversion de A.
+;; Propósito:
+;; L -> x: determina el número de inversiones de la lista L. De manera formal,
+;; sea A una lista de n números diferentes, si i < j (posición)
+;; y ai > aj (dato en la posición) entonces la pareja (i j) es una inversión de A.
 ;;
 ;; compare
 ;; Propósito:
-;; n x l -> 'L : compara si el elemento de la lista es una inversion, si lo es suma 1 y si no 0.
+;; n x l -> 'L : compara si el elemento de la lista es una inversión, si lo es suma 1 y si no 0.
 ;; <lista> := ( {<int>}* )
 
 (define inversions
@@ -313,9 +315,9 @@ Christian Vargas 2179172
 ;; ********************* Problema 11 *********************
 ;; zip
 ;; Propósito:
-;; F x L1 x L2 -> L' : Retorna una L' donde la posicion n-ésima corresponde
-;;                     al resultado de aplicar la funcion F sobre los elementos
-;;                     en la posicion n-ésima en L1 y L2.
+;; F x L1 x L2 -> L' : Retorna una L' donde la posición n-ésima corresponde
+;;                     al resultado de aplicar la función F sobre los elementos
+;;                     en la posición n-ésima en L1 y L2.
 ;;
 ;; <lista> := () | (<SchemeValue> <lista>)
 
@@ -332,13 +334,14 @@ Christian Vargas 2179172
 (zip eqv? '(a 1 "es") '(a "mo" "es"))
 
 
+
 ;; ********************* Problema 12 *********************
 ;; filter-acum :
-;; Proposito: 
-;; a x b x F x acum x filter -> x: El procedimiento filter-acum aplicara la
-;; funcion binaria F a todos los elementos que estan en el intervalo [a; b] y que
-;; a su vez todos estos elementos cumplen con el predicado de la funcion filter,
-;; el resultadose debe ir conservando en acum y debe retornar el valor final
+;; Propósito: 
+;; a x b x F x acum x filter -> x: El procedimiento filter-acum aplicará la
+;; función binaria F a todos los elementos que están en el intervalo [a; b] y que
+;; a su vez todos estos elementos cumplen con el predicado de la función filter,
+;; el resultadose se debe ir conservando en acum y debe retornar el valor final
 ;; de acum.
 ;;
 ;; <OperacionB> := <int>
@@ -412,6 +415,8 @@ Christian Vargas 2179172
 (path 17 '(14 (7 () (12 () ())) (26 (20 (17 () ()) ()) (31 () ()))))
 (path 13 '(8 (3 (1 () ()) (6 (4 () ()) (7 () ()))) (10 () (14 (13 () ()) ()))))
 (path 2 '(2 (1 () ()) (3 () ())))
+
+
 
 ;; ********************* Problema 15 *********************
 ;; count-odd-and-even
@@ -518,10 +523,12 @@ Christian Vargas 2179172
 (prod-scalar-matriz '((1 1) (2 2)) '(2 3))
 (prod-scalar-matriz '((1 1) (2 2) (3 3)) '(2 3))
 
+
+
 ;; ********************* Problema 18 *********************
 ;; pascal :
-;; Proposito: 
-;; N -> 'L: retorna la fila N del triangulo de Pascal.
+;; Propósito: 
+;; N -> 'L: retorna la fila N del triángulo de Pascal.
 ;;
 ;; calc-fila
 ;; Propósito:
